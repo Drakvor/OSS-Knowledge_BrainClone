@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mem0-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.azure
+    ports:
+      - "8005:8005"
+    environment:
+      - ENVIRONMENT=development
+      - AZURE_SEARCH_API_KEY=${AZURE_SEARCH_API_KEY}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+    volumes:
+      - ./config:/app/config
+      - ./src:/app/src
+    depends_on:
+      - postgres-dev
+      - redis-dev
+
+  postgres-dev:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=mem0db
+      - POSTGRES_USER=mem0admin
+      - POSTGRES_PASSWORD=changeme
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis-dev:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:

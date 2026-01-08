@@ -1,0 +1,18 @@
+# MEM0 core
+mem0ai>=0.1.117
+
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Azure Services
+azure-search-documents>=11.4.0
+azure-identity>=1.24.0
+
+# Database
+psycopg2-binary
+langchain-neo4j
+rank-bm25
+
+# Configuration
+python-dotenv

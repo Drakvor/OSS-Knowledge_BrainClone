@@ -1,0 +1,14 @@
+# Neo4j Configuration for Task Planner
+neo4j:
+  uri: ${NEO4J_URI:-neo4j://localhost:7687}
+  username: ${NEO4J_USERNAME:-neo4j}
+  password: ${NEO4J_PASSWORD:-password}
+  database: ${NEO4J_DATABASE:-neo4j}
+  timeout: ${NEO4J_TIMEOUT:-30}
+
+# Qdrant Configuration for Task Planner
+qdrant:
+  host: ${QDRANT_HOST:-20.249.165.27}
+  port: ${QDRANT_PORT:-6333}
+  timeout: ${QDRANT_TIMEOUT:-30}
+

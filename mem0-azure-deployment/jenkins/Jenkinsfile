@@ -1,0 +1,154 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: python
+    image: python:3.11-slim
+    command:
+    - sleep
+    args:
+    - 99d
+  - name: docker
+    image: docker:20-dind
+    securityContext:
+      privileged: true
+    env:
+    - name: DOCKER_TLS_CERTDIR
+      value: ""
+"""
+        }
+    }
+
+    environment {
+        DOCKER_REGISTRY = 'ossknowledgeregistry.azurecr.io'
+        ACR_CREDENTIAL_ID = 'acr-credential'
+        IMAGE_NAME = 'mem0-app'
+        GITLAB_URL = 'https://gitlab.4.230.158.187.nip.io'
+        GITOPS_REPO = 'oss-ai-vtf/oss-knowledge-gitops'
+        NAMESPACE = 'oss-knowledge-mem0-dev'
+        GITLAB_TOKEN = credentials('gitlab-token')
+        GIT_SSL_NO_VERIFY = 'true'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "Checking out code..."
+                script {
+                    sh '''
+                        git config --global http.sslVerify false
+                        git config --global user.email "jenkins@mem0-project.com"
+                        git config --global user.name "Jenkins CI/CD"
+                    '''
+                }
+            }
+        }
+        
+        stage('Validate') {
+            steps {
+                container('python') {
+                    sh '''
+                        echo "Validating Python dependencies..."
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                        echo "Validation successful"
+                    '''
+                }
+            }
+        }
+        
+        stage('Build & Push to ACR') {
+            steps {
+                container('docker') {
+                    script {
+                        def branchName = env.BRANCH_NAME ?: 'main'
+                        def imageTag = branchName == 'main' ? 'latest' : branchName.replaceAll('[^a-zA-Z0-9._-]', '-')
+                        def buildTag = "${env.BUILD_NUMBER}-${imageTag}"
+                        def fullImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:${buildTag}"
+                        def latestImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag}"
+                        
+                        withCredentials([usernamePassword(
+                            credentialsId: ACR_CREDENTIAL_ID,
+                            usernameVariable: 'ACR_USERNAME',
+                            passwordVariable: 'ACR_PASSWORD'
+                        )]) {
+                            sh """
+                                until docker info; do
+                                    echo "Waiting for Docker daemon..."
+                                    sleep 2
+                                done
+                                
+                                echo "Logging in to ACR..."
+                                echo \$ACR_PASSWORD | docker login ${DOCKER_REGISTRY} -u \$ACR_USERNAME --password-stdin
+                                
+                                echo "Building Docker image..."
+                                docker build -f Dockerfile.azure -t ${fullImageName} -t ${latestImageName} .
+                                
+                                echo "Pushing to ACR..."
+                                docker push ${fullImageName}
+                                docker push ${latestImageName}
+                                
+                                docker logout ${DOCKER_REGISTRY}
+                                docker rmi ${fullImageName} ${latestImageName} || true
+                                
+                                echo "Successfully pushed to ACR!"
+                            """
+                        }
+                        
+                        env.FINAL_IMAGE_TAG = buildTag
+                        env.FINAL_IMAGE_NAME = fullImageName
+                    }
+                }
+            }
+        }
+        
+        stage('Update GitOps Repository') {
+            steps {
+                script {
+                    def imageTag = env.FINAL_IMAGE_TAG
+                    
+                    withCredentials([string(credentialsId: 'gitlab-token', variable: 'GITLAB_TOKEN')]) {
+                        sh """
+                            git config --global user.email "jenkins@mem0-project.com"
+                            git config --global user.name "Jenkins CI/CD"
+                            git config --global http.sslVerify false
+                            
+                            rm -rf gitops-temp || true
+                            
+                            git clone --config http.sslVerify=false https://oauth2:\$GITLAB_TOKEN@gitlab.4.230.158.187.nip.io/${GITOPS_REPO}.git gitops-temp
+                            cd gitops-temp
+                            
+                            git checkout main 2>/dev/null || git checkout master
+                            
+                            sed -i 's|newTag:.*|newTag: ${imageTag}|' backend/mem0/overlays/dev/kustomization.yaml
+                            
+                            git add backend/mem0/overlays/dev/kustomization.yaml
+                            if ! git diff --cached --quiet; then
+                                git commit -m "Update mem0-app image to ${imageTag} (Build #${env.BUILD_NUMBER})"
+                                git -c http.sslVerify=false push origin HEAD
+                                echo "GitOps repository updated successfully!"
+                            else
+                                echo "No changes to commit"
+                            fi
+                            
+                            cd ..
+                            rm -rf gitops-temp
+                        """
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo "Pipeline completed successfully!"
+            echo "Image: ${env.FINAL_IMAGE_NAME ?: 'N/A'}"
+            echo "Tag: ${env.FINAL_IMAGE_TAG ?: 'N/A'}"
+        }
+    }
+}

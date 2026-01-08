@@ -1,0 +1,330 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: nodejs
+    image: node:18
+    command:
+    - sleep
+    args:
+    - 99d
+    env:
+    - name: GIT_SSL_NO_VERIFY
+      value: "true"
+  - name: docker
+    image: docker:20-dind
+    securityContext:
+      privileged: true
+    env:
+    - name: DOCKER_TLS_CERTDIR
+      value: ""
+  - name: kubectl
+    image: alpine/kubectl:latest
+    command:
+    - sleep
+    args:
+    - 99d
+"""
+        }
+    }
+
+    environment {
+        // ACR 설정
+        DOCKER_REGISTRY = 'ossknowledgeregistry.azurecr.io'
+        ACR_CREDENTIAL_ID = 'acr-credential'
+        IMAGE_NAME = 'oss-knowledge-front'
+        
+        // GitLab 및 GitOps 설정
+        GITLAB_URL = 'https://gitlab.4.230.158.187.nip.io'
+        GITOPS_REPO = 'oss-ai-vtf/oss-knowledge-gitops'
+        NAMESPACE = 'oss-knowledge-front-dev'
+        GITLAB_TOKEN = credentials('gitlab-token')
+        
+        // Git SSL 설정
+        GIT_SSL_NO_VERIFY = 'true'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "📄 Checking out source code..."
+                script {
+                    // Git SSL 검증 완전 비활성화
+                    sh '''
+                        git config --global http.sslVerify false
+                        git config --global http.postBuffer 524288000
+                        git config --global http.lowSpeedLimit 0
+                        git config --global http.lowSpeedTime 999999
+                        git config --global http.version HTTP/1.1
+                        git config --global user.email "jenkins@oss-knowledge.com"
+                        git config --global user.name "Jenkins CI/CD"
+                        echo "Git SSL verification disabled and user configured"
+                    '''
+                    
+                    // 현재 브랜치와 커밋 정보 확인
+                    def actualBranch = env.BRANCH_NAME ?: 'main'
+                    if (env.GIT_BRANCH && env.GIT_BRANCH.startsWith('origin/')) {
+                        actualBranch = env.GIT_BRANCH.replaceAll('origin/', '')
+                    }
+                    echo "Branch: ${actualBranch}"
+                    echo "Commit: ${env.GIT_COMMIT ?: 'unknown'}"
+                }
+            }
+        }
+        
+        stage('Install Dependencies & Build') {
+            steps {
+                container('nodejs') {
+                    script {
+                        // Jenkins에 설치된 NodeJS 사용 (정확한 이름: NodeJS-24.6.0)
+                        try {
+                            def nodejs = tool name: 'NodeJS-24.6.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+                            env.PATH = "${nodejs}/bin:${env.PATH}"
+                        } catch (Exception e) {
+                            echo "⚠️ NodeJS tool not found, using system Node.js"
+                            echo "Error: ${e.message}"
+                        }
+                        
+                        sh '''
+                            echo "🔧 Using NodeJS version:"
+                            node --version
+                            npm --version
+                            
+                            echo "📦 Installing dependencies..."
+                            npm ci
+                            
+                            echo "🏗️ Building application..."
+                            npm run build
+                            
+                            echo "✅ Build completed. Contents:"
+                            ls -la dist/
+                            du -sh dist/
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Build & Push to ACR') {
+            steps {
+                container('docker') {
+                    script {
+                        // Branch name 확인 및 기본값 설정
+                        def branchName = env.BRANCH_NAME ?: 'main'
+                        if (env.GIT_BRANCH && env.GIT_BRANCH.startsWith('origin/')) {
+                            branchName = env.GIT_BRANCH.replaceAll('origin/', '')
+                        }
+                        def imageTag = branchName == 'main' ? 'latest' : branchName.replaceAll('[^a-zA-Z0-9._-]', '-')
+                        def buildTag = "${env.BUILD_NUMBER}-${imageTag}"
+                        def fullImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:${buildTag}"
+                        def latestImageName = "${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag}"
+                        
+                        echo "🐳 Building Docker image..."
+                        echo "Branch: ${branchName}, Tag: ${imageTag}, Build Tag: ${buildTag}"
+                        echo "Image: ${fullImageName}"
+                        
+                        // ACR 로그인 및 이미지 빌드/푸시
+                        withCredentials([usernamePassword(
+                            credentialsId: ACR_CREDENTIAL_ID,
+                            usernameVariable: 'ACR_USERNAME',
+                            passwordVariable: 'ACR_PASSWORD'
+                        )]) {
+                            sh """
+                                # Docker 데몬 준비 대기
+                                until docker info; do
+                                    echo "Waiting for Docker daemon..."
+                                    sleep 2
+                                done
+                                
+                                # ACR 로그인
+                                echo "🔐 Logging in to ACR..."
+                                echo \$ACR_PASSWORD | docker login ${DOCKER_REGISTRY} -u \$ACR_USERNAME --password-stdin
+                                
+                                # Docker 이미지 빌드 (환경변수 전달)
+                                echo "🛠️ Building Docker image..."
+                                docker build \\
+                                    --build-arg VITE_API_BASE_URL=http://oss-knowledge-meta-api-dev.4.230.158.187.nip.io \\
+                                    --build-arg VITE_EMBEDDING_API_BASE_URL=http://oss-knowledge-embedding-dev.4.230.158.187.nip.io \\
+                                    --build-arg VITE_SEARCH_API_BASE_URL=http://oss-knowledge-search-dev.4.230.158.187.nip.io \\
+                                    -t ${fullImageName} -t ${latestImageName} .
+                                
+                                # 이미지 정보 확인
+                                docker images | grep ${IMAGE_NAME}
+                                
+                                # ACR에 푸시
+                                echo "🚀 Pushing to ACR..."
+                                docker push ${fullImageName}
+                                docker push ${latestImageName}
+                                
+                                # 로그아웃 및 정리
+                                docker logout ${DOCKER_REGISTRY}
+                                docker rmi ${fullImageName} ${latestImageName} || true
+                                
+                                echo "✅ Successfully pushed to ACR!"
+                            """
+                        }
+                        
+                        // 환경 변수 설정 (다음 스테이지에서 사용)
+                        env.FINAL_IMAGE_TAG = buildTag
+                        env.FINAL_IMAGE_NAME = fullImageName
+                    }
+                }
+            }
+        }
+        
+        stage('Update GitOps Repository') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                    branch 'master'
+                    expression { env.BRANCH_NAME == 'main' }
+                    expression { env.GIT_BRANCH == 'origin/main' }
+                }
+            }
+            steps {
+                script {
+                    updateGitOpsRepository()
+                }
+            }
+        }
+        
+        stage('Trigger ArgoCD Sync') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                    branch 'master'
+                }
+            }
+            steps {
+                script {
+                    echo "🔄 Checking ArgoCD Application status..."
+                    
+                    sh """
+                        # ArgoCD Application 존재 확인
+                        if kubectl get application oss-knowledge-front-dev -n argocd; then
+                            echo "✅ ArgoCD Application found"
+                            
+                            # 수동 동기화 트리거
+                            kubectl patch application oss-knowledge-front-dev -n argocd \\
+                            --type='json' \\
+                            -p='[{"op":"replace","path":"/operation","value":{"sync":{"syncStrategy":{"apply":{"force":true}}}}}]' || \\
+                            echo "⚠️ Manual sync required via ArgoCD UI"
+                        else
+                            echo "⚠️ ArgoCD Application not found. Please create it manually:"
+                            echo "Application Name: oss-knowledge-front-dev"
+                            echo "Repository: ${GITLAB_URL}/${GITOPS_REPO}"
+                            echo "Path: front/overlays/dev"
+                            echo "Namespace: ${NAMESPACE}"
+                        fi
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            script {
+                echo '✅ Pipeline completed successfully!'
+                echo "🐳 Image pushed to ACR: ${env.FINAL_IMAGE_NAME ?: 'N/A'}"
+                echo "🏷️ Tag: ${env.FINAL_IMAGE_TAG ?: 'N/A'}"
+                echo "🔗 ArgoCD: http://argocd.4.230.158.187.nip.io"
+            }
+        }
+        failure {
+            script {
+                echo '❌ Pipeline failed!'
+                echo '💡 Check the stage logs above for detailed error information'
+            }
+        }
+    }
+}
+
+def updateGitOpsRepository() {
+    def imageTag = env.FINAL_IMAGE_TAG
+    
+    withCredentials([string(credentialsId: 'gitlab-token', variable: 'GITLAB_TOKEN')]) {
+        sh """
+            echo "🔄 Updating GitOps repository..."
+            
+            # Git 설정 - SSL 검증 비활성화
+            git config --global user.email "jenkins@oss-knowledge.com"
+            git config --global user.name "Jenkins CI/CD"
+            git config --global http.sslVerify false
+            git config --global http.postBuffer 524288000
+            
+            # 임시 디렉토리 생성
+            rm -rf gitops-temp || true
+            
+            # GitOps 레포지토리 클론
+            echo "📥 Cloning GitOps repository..."
+            git clone --config http.sslVerify=false https://oauth2:\$GITLAB_TOKEN@gitlab.4.230.158.187.nip.io/${GITOPS_REPO}.git gitops-temp
+            cd gitops-temp
+            
+            # 메인 브랜치로 체크아웃
+            git checkout main 2>/dev/null || git checkout master 2>/dev/null || git checkout -b main
+            
+            # GitOps 구조 생성
+            mkdir -p front/base
+            mkdir -p front/overlays/dev
+            
+            # Base kustomization 생성
+            if [ ! -f "front/base/kustomization.yaml" ]; then
+                cat > front/base/kustomization.yaml << 'EOF'
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+
+commonLabels:
+  app: oss-knowledge-front
+EOF
+            fi
+            
+            # Dev overlay kustomization 업데이트
+            cat > front/overlays/dev/kustomization.yaml << EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+
+namespace: ${NAMESPACE}
+
+images:
+- name: ${IMAGE_NAME}
+  newName: ${DOCKER_REGISTRY}/${IMAGE_NAME}
+  newTag: ${imageTag}
+
+commonLabels:
+  environment: dev
+EOF
+            
+            # 변경사항 확인 및 커밋
+            echo "📋 Changes to be committed:"
+            git status
+            
+            git add .
+            if git diff --cached --quiet; then
+                echo "ℹ️ No changes to commit"
+            else
+                git commit -m "🚀 Update ${IMAGE_NAME} image to ${imageTag} (Build #${env.BUILD_NUMBER})"
+                git -c http.sslVerify=false push origin HEAD
+                echo "✅ GitOps repository updated successfully!"
+            fi
+            
+            # 정리
+            cd ..
+            rm -rf gitops-temp
+        """
+    }
+}

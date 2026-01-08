@@ -1,0 +1,31 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# 시스템 패키지 설치
+RUN apt-get update && apt-get install -y \
+    gcc g++ curl git \
+    && rm -rf /var/lib/apt/lists/*
+
+# MEM0 디렉토리 생성 및 권한 설정
+RUN mkdir -p /home/mem0 && chmod 777 /home/mem0
+
+# Python 의존성 설치
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Azure 관련 패키지 설치
+RUN pip install \
+    azure-search-documents==11.4.0 \
+    azure-identity==1.15.0 \
+    psycopg2-binary==2.9.9
+
+# 애플리케이션 코드 복사
+COPY src/ ./src/
+COPY config/ ./config/
+
+# 포트 노출
+EXPOSE 8000
+
+# 애플리케이션 실행
+CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

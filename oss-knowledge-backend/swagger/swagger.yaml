@@ -1,0 +1,1181 @@
+openapi: 3.1.0
+info:
+  title: OSS Knowledge Backend API
+  description: OSS 지식 관리 시스템의 백엔드 API 서버입니다. RAG(Retrieval-Augmented Generation) 기반의 지식 검색 및 대화 관리 기능을 제공합니다.
+  version: 1.0.0
+  contact:
+    name: OSS Knowledge Team
+    email: oss-knowledge@example.com
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.oss-knowledge.com
+    description: Production server
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    X-Request-Id:
+      name: X-Request-Id
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 요청 추적 ID
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: E400
+        message:
+          type: string
+          example: Invalid request
+    ChatSession:
+      type: object
+      required: [id, title, llmModel, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        userId:
+          type: integer
+          format: int64
+          description: User ID
+          example: 1
+        title:
+          type: string
+          description: Session title
+          example: "새 대화"
+        departmentId:
+          type: integer
+          format: int64
+          description: Department ID
+          example: 1
+        agentId:
+          type: string
+          description: Agent ID
+          example: "01HZX4N3ABCD1234567XYZ893"
+        llmModel:
+          type: string
+          description: LLM model
+          example: "gpt-4o"
+        status:
+          type: string
+          description: Session status
+          example: "active"
+        metadata:
+          type: object
+          description: Session metadata
+          example: {"statistics": {"messageCount": 10}}
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+    ChatMessage:
+      type: object
+      required: [id, sessionId, messageType, content, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID
+          example: 550e8400-e29b-41d4-a716-446655440001
+        sessionId:
+          type: string
+          format: uuid
+          description: Session UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        messageType:
+          type: string
+          description: Message type
+          enum: [user, assistant, system]
+          example: "user"
+        content:
+          type: string
+          description: Message content
+          example: "안녕하세요!"
+        metadata:
+          type: object
+          description: Message metadata
+          example: {"searchResults": [], "processingTime": 1.5}
+        parentMessageId:
+          type: string
+          format: uuid
+          description: Parent message UUID
+          nullable: true
+          example: null
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+    ChatMessageFeedback:
+      type: object
+      required: [id, messageId, rating, feedbackType, isAnonymous, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID
+          example: 550e8400-e29b-41d4-a716-446655440002
+        messageId:
+          type: string
+          format: uuid
+          description: Message UUID
+          example: 550e8400-e29b-41d4-a716-446655440001
+        userId:
+          type: integer
+          format: int64
+          description: User ID
+          nullable: true
+          example: 1
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Rating (1-5)
+          example: 5
+        comment:
+          type: string
+          description: User comment
+          nullable: true
+          example: "매우 도움이 되었습니다!"
+        feedbackType:
+          type: string
+          description: Feedback type
+          enum: [general, accuracy, helpfulness, clarity]
+          example: "general"
+        isAnonymous:
+          type: boolean
+          description: Anonymous feedback
+          example: true
+        metadata:
+          type: object
+          description: Feedback metadata
+          example: {"source": "web"}
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+    User:
+      type: object
+      required: [id, username, password, role, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: User ID
+          example: 1
+        username:
+          type: string
+          description: Username
+          example: "oss"
+        password:
+          type: string
+          description: Hashed password
+          example: "$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVEFDi"
+        email:
+          type: string
+          description: Email address
+          example: "oss@neoss.com"
+        fullName:
+          type: string
+          description: Full name
+          example: "OSS Admin"
+        role:
+          type: string
+          description: User role
+          enum: [ADMIN, USER]
+          example: "ADMIN"
+        status:
+          type: string
+          description: User status
+          enum: [ACTIVE, INACTIVE]
+          example: "ACTIVE"
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        lastLogin:
+          type: string
+          format: date-time
+          nullable: true
+          example: 2024-04-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+    RAGDepartment:
+      type: object
+      required: [id, name, status, createdAt, lastUpdated]
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Department ID
+          example: 1
+        name:
+          type: string
+          description: Department name
+          example: "WM 현장팀"
+        description:
+          type: string
+          description: Department description
+          example: "WM 현장 작업 및 관리"
+        icon:
+          type: string
+          description: Department icon
+          example: "🏭"
+        color:
+          type: string
+          description: Department color
+          example: "blue"
+        status:
+          type: string
+          description: Department status
+          enum: [active, inactive]
+          example: "active"
+        keywords:
+          type: array
+          items:
+            type: string
+          description: Department keywords
+          example: ["WM", "현장", "작업", "관리", "프로세스"]
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        lastUpdated:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+        monthlyQueries:
+          type: integer
+          description: Monthly queries count
+          example: 245
+    Agent:
+      type: object
+      required: [id, name, model, createdAt]
+      properties:
+        id:
+          type: string
+          description: Agent ID
+          example: "01HZX4N3ABCD1234567XYZ893"
+        name:
+          type: string
+          description: Agent name
+          example: "default"
+        model:
+          type: string
+          description: Model name
+          example: "gpt-4o"
+        description:
+          type: string
+          description: Agent description
+          example: "기본 RAG 에이전트"
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+    ChatSessionRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: User ID
+          example: 1
+        title:
+          type: string
+          description: Session title
+          example: "새 대화"
+        departmentId:
+          type: integer
+          format: int64
+          description: Department ID
+          example: 1
+        agentId:
+          type: string
+          description: Agent ID
+          example: "01HZX4N3ABCD1234567XYZ893"
+        llmModel:
+          type: string
+          description: LLM model
+          example: "gpt-4o"
+        status:
+          type: string
+          description: Session status
+          example: "active"
+        metadata:
+          type: object
+          description: Session metadata
+          example: {"statistics": {"messageCount": 0}}
+    ChatMessageRequest:
+      type: object
+      required: [sessionId, messageType, content]
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+          description: Session UUID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        messageType:
+          type: string
+          description: Message type
+          enum: [user, assistant, system]
+          example: "user"
+        content:
+          type: string
+          description: Message content
+          example: "안녕하세요!"
+        metadata:
+          type: object
+          description: Message metadata
+          example: {"searchResults": [], "processingTime": 1.5}
+        parentMessageId:
+          type: string
+          format: uuid
+          description: Parent message UUID
+          nullable: true
+          example: null
+    ChatMessageFeedbackRequest:
+      type: object
+      required: [messageId, rating]
+      properties:
+        messageId:
+          type: string
+          format: uuid
+          description: Message UUID
+          example: 550e8400-e29b-41d4-a716-446655440001
+        userId:
+          type: integer
+          format: int64
+          description: User ID
+          nullable: true
+          example: 1
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Rating (1-5)
+          example: 5
+        comment:
+          type: string
+          description: User comment
+          nullable: true
+          example: "매우 도움이 되었습니다!"
+        feedbackType:
+          type: string
+          description: Feedback type
+          enum: [general, accuracy, helpfulness, clarity]
+          example: "general"
+        isAnonymous:
+          type: boolean
+          description: Anonymous feedback
+          example: true
+        metadata:
+          type: object
+          description: Feedback metadata
+          example: {"source": "web"}
+    Conversation:
+      type: object
+      required: [id, sessionId, title, likes, liked, createdAt]
+      properties:
+        id:
+          type: string
+          description: ULID
+          example: 01HZX4N3ABCD1234567XYZ892
+        sessionId:
+          type: string
+          description: ULID
+          example: 01HZX4N3ABCD1234567XYZ890
+        title:
+          type: string
+          example: First conversation
+        likes:
+          type: integer
+          example: 3
+        liked:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+    ConversationRequest:
+      type: object
+      required: [sessionId, title]
+      properties:
+        sessionId:
+          type: string
+          description: ULID
+          example: 01HZX4N3ABCD1234567XYZ890
+        title:
+          type: string
+          example: First conversation
+    Agent:
+      type: object
+      required: [id, name, model, createdAt]
+      properties:
+        id:
+          type: string
+          description: ULID
+          example: 01HZX4N3ABCD1234567XYZ893
+        name:
+          type: string
+          example: default
+        model:
+          type: string
+          example: gpt-4o
+        description:
+          type: string
+          example: 기본 RAG 에이전트
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-04-01T12:00:00Z
+    AgentRequest:
+      type: object
+      required: [name, model]
+      properties:
+        name:
+          type: string
+          example: default
+        model:
+          type: string
+          example: gpt-4o
+        description:
+          type: string
+          example: 기본 RAG 에이전트
+    PageResponse_Session:
+      type: object
+      required: [total, page, size, items]
+      properties:
+        total:
+          type: integer
+          example: 1
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 20
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Session'
+    PageResponse_Conversation:
+      type: object
+      required: [total, page, size, items]
+      properties:
+        total:
+          type: integer
+          example: 1
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 20
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+    PageResponse_Agent:
+      type: object
+      required: [total, page, size, items]
+      properties:
+        total:
+          type: integer
+          example: 1
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 20
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Agent'
+    ChatRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+          example: "Hello"
+        stream:
+          type: boolean
+          default: true
+    ChatNonStreamResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1712123123123"
+        message:
+          type: string
+          example: ok
+        content:
+          type: string
+          example: This is a non-streaming reply.
+    ListResponse_Conversation:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+    DeleteResponse:
+      type: object
+      properties:
+        deleted:
+          type: boolean
+          example: true
+        id:
+          type: string
+          nullable: true
+    AzureStatus:
+      type: object
+      properties:
+        connected:
+          type: boolean
+        message:
+          type: string
+    SyncResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: queued
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        time:
+          type: string
+          example: 2024-04-01T12:00:00Z
+  responses:
+    BadRequest:
+      description: 잘못된 요청
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: 인증 실패
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: 리소스를 찾을 수 없음
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: 리소스 충돌
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ServerError:
+      description: 서버 오류
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+paths:
+  /chat:
+    post:
+      summary: 채팅 요청 (SSE 또는 일반 응답)
+      security:
+        - ApiKeyAuth: []
+          BearerAuth: []
+          BearerAuth: []
+          BearerAuth: []
+          BearerAuth: []
+      description: stream=true일 때 text/event-stream으로 스트리밍 응답(SSE)을 반환합니다. 각 이벤트는 data: <json> 또는 [DONE] 형태입니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: 성공
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: SSE 데이터 스트림 (data: ...)
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatNonStreamResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /conversations:
+    get:
+      summary: 대화 목록 조회 (프런트엔드 용)
+      security:
+        - ApiKeyAuth: []
+          BearerAuth: []
+          BearerAuth: []
+          BearerAuth: []
+          BearerAuth: []
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse_Conversation'
+  /conversations/{conversationId}:
+    delete:
+      summary: 대화 삭제 (프런트엔드 용)
+      security:
+        - ApiKeyAuth: []
+          BearerAuth: []
+          BearerAuth: []
+          BearerAuth: []
+          BearerAuth: []
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 삭제 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /azure/connection-status:
+    get:
+      summary: Azure File Share 연결 상태
+      security:
+        - ApiKeyAuth: []
+          BearerAuth: []
+      responses:
+        '200':
+          description: 상태 정보
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzureStatus'
+  /azure/sync:
+    post:
+      summary: Azure File Share 동기화 요청
+      security:
+        - ApiKeyAuth: []
+          BearerAuth: []
+      responses:
+        '200':
+          description: 동기화 실행 상태
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncResponse'
+  /health:
+    get:
+      summary: 헬스 체크
+      responses:
+        '200':
+          description: 시스템 상태
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /sessions:
+    get:
+      summary: 세션 목록 조회
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          schema:
+            type: string
+            example: createdAt,desc
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse_Session'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      summary: 세션 생성
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRequest'
+      responses:
+        '201':
+          description: 생성됨
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /sessions/{sessionId}:
+    get:
+      summary: 세션 조회
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    put:
+      summary: 세션 수정
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRequest'
+      responses:
+        '200':
+          description: 수정됨
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      summary: 세션 삭제
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 삭제됨
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /conversations:
+    get:
+      summary: 대화 목록 조회
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse_Conversation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      summary: 대화 생성
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationRequest'
+      responses:
+        '201':
+          description: 생성됨
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /conversations/{conversationId}:
+    get:
+      summary: 대화 조회
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    put:
+      summary: 대화 수정
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationRequest'
+      responses:
+        '200':
+          description: 수정됨
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      summary: 대화 삭제
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 삭제됨
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /conversations/{conversationId}/likes:
+    post:
+      summary: 대화 좋아요 토글
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /agents:
+    get:
+      summary: 에이전트 목록 조회
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse_Agent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      summary: 에이전트 생성
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentRequest'
+      responses:
+        '201':
+          description: 생성됨
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /agents/{agentId}:
+    get:
+      summary: 에이전트 조회
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    put:
+      summary: 에이전트 수정
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentRequest'
+      responses:
+        '200':
+          description: 수정됨
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      summary: 에이전트 삭제
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 삭제됨
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'

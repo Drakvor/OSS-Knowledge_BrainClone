@@ -1,0 +1,992 @@
+[
+  {
+    "name": "Paragraph - Small chunks",
+    "strategy": "paragraph",
+    "size": 200,
+    "overlap": 30,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine Learning",
+        "start_position": 0,
+        "end_position": 34,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 34
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "troduction to Machine LearningMachine learning is a subset of artificial intelligence that focuses on building systems that learn from data. These systems improve their performance over time without being explicitly programmed.",
+        "start_position": 4,
+        "end_position": 231,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 227
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "t being explicitly programmed.## Types of Machine LearningThere are three main types of machine learning approaches. Each has its own strengths and use cases.### Supervised Learning",
+        "start_position": 201,
+        "end_position": 382,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 181
+        }
+      },
+      {
+        "chunk_id": "chunk_3",
+        "content": " cases.### Supervised LearningSupervised learning uses labeled training data to learn the relationship between inputs and outputs. The algorithm learns from examples where the correct answer is already known. Common applications include spam detection, image classification, and price prediction.",
+        "start_position": 352,
+        "end_position": 648,
+        "metadata": {
+          "chunk_index": 3,
+          "length": 296
+        }
+      },
+      {
+        "chunk_id": "chunk_4",
+        "content": "ication, and price prediction.### Unsupervised Learning",
+        "start_position": 618,
+        "end_position": 673,
+        "metadata": {
+          "chunk_index": 4,
+          "length": 55
+        }
+      },
+      {
+        "chunk_id": "chunk_5",
+        "content": "tion.### Unsupervised LearningUnsupervised learning works with unlabeled data to find hidden patterns or structures. The algorithm explores the data without predefined categories. Clustering and dimensionality reduction are popular unsupervised techniques.",
+        "start_position": 643,
+        "end_position": 899,
+        "metadata": {
+          "chunk_index": 5,
+          "length": 256
+        }
+      },
+      {
+        "chunk_id": "chunk_6",
+        "content": "pular unsupervised techniques.### Reinforcement Learning",
+        "start_position": 869,
+        "end_position": 925,
+        "metadata": {
+          "chunk_index": 6,
+          "length": 56
+        }
+      },
+      {
+        "chunk_id": "chunk_7",
+        "content": "ues.### Reinforcement LearningReinforcement learning trains agents to make decisions through trial and error. The agent receives rewards or penalties based on its actions. This approach is used in robotics, game playing, and autonomous systems.",
+        "start_position": 895,
+        "end_position": 1139,
+        "metadata": {
+          "chunk_index": 7,
+          "length": 244
+        }
+      },
+      {
+        "chunk_id": "chunk_8",
+        "content": "aying, and autonomous systems.## Key ConceptsUnderstanding machine learning requires familiarity with several fundamental concepts. These building blocks form the foundation of modern AI systems.",
+        "start_position": 1109,
+        "end_position": 1304,
+        "metadata": {
+          "chunk_index": 8,
+          "length": 195
+        }
+      },
+      {
+        "chunk_id": "chunk_9",
+        "content": "undation of modern AI systems.### Training and Testing",
+        "start_position": 1274,
+        "end_position": 1328,
+        "metadata": {
+          "chunk_index": 9,
+          "length": 54
+        }
+      },
+      {
+        "chunk_id": "chunk_10",
+        "content": "stems.### Training and TestingModels are trained on historical data and tested on new, unseen data. The training phase involves adjusting model parameters to minimize errors. Testing evaluates how well the model generalizes to new situations.",
+        "start_position": 1298,
+        "end_position": 1540,
+        "metadata": {
+          "chunk_index": 10,
+          "length": 242
+        }
+      },
+      {
+        "chunk_id": "chunk_11",
+        "content": "generalizes to new situations.### Overfitting and Underfitting",
+        "start_position": 1510,
+        "end_position": 1572,
+        "metadata": {
+          "chunk_index": 11,
+          "length": 62
+        }
+      },
+      {
+        "chunk_id": "chunk_12",
+        "content": "# Overfitting and UnderfittingOverfitting occurs when a model learns training data too well, including noise. Underfitting happens when a model is too simple to capture patterns. Finding the right balance is crucial for model performance.",
+        "start_position": 1542,
+        "end_position": 1780,
+        "metadata": {
+          "chunk_index": 12,
+          "length": 238
+        }
+      },
+      {
+        "chunk_id": "chunk_13",
+        "content": "crucial for model performance.## Conclusion",
+        "start_position": 1750,
+        "end_position": 1793,
+        "metadata": {
+          "chunk_index": 13,
+          "length": 43
+        }
+      },
+      {
+        "chunk_id": "chunk_14",
+        "content": "odel performance.## ConclusionMachine learning continues to evolve and transform industries worldwide. From healthcare to finance, its applications are expanding rapidly. Understanding these fundamentals is essential for anyone entering the field.\n",
+        "start_position": 1763,
+        "end_position": 2011,
+        "metadata": {
+          "chunk_index": 14,
+          "length": 248
+        }
+      }
+    ],
+    "total_chunks": 15,
+    "avg_chunk_size": 162.06666666666666
+  },
+  {
+    "name": "Paragraph - Medium chunks",
+    "strategy": "paragraph",
+    "size": 500,
+    "overlap": 50,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine LearningMachine learning is a subset of artificial intelligence that focuses on building systems that learn from data. These systems improve their performance over time without being explicitly programmed.## Types of Machine LearningThere are three main types of machine learning approaches. Each has its own strengths and use cases.### Supervised Learning",
+        "start_position": 0,
+        "end_position": 382,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 382
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "wn strengths and use cases.### Supervised LearningSupervised learning uses labeled training data to learn the relationship between inputs and outputs. The algorithm learns from examples where the correct answer is already known. Common applications include spam detection, image classification, and price prediction.### Unsupervised Learning",
+        "start_position": 332,
+        "end_position": 673,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 341
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "on, and price prediction.### Unsupervised LearningUnsupervised learning works with unlabeled data to find hidden patterns or structures. The algorithm explores the data without predefined categories. Clustering and dimensionality reduction are popular unsupervised techniques.### Reinforcement Learning",
+        "start_position": 623,
+        "end_position": 925,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 302
+        }
+      },
+      {
+        "chunk_id": "chunk_3",
+        "content": "unsupervised techniques.### Reinforcement LearningReinforcement learning trains agents to make decisions through trial and error. The agent receives rewards or penalties based on its actions. This approach is used in robotics, game playing, and autonomous systems.## Key ConceptsUnderstanding machine learning requires familiarity with several fundamental concepts. These building blocks form the foundation of modern AI systems.### Training and Testing",
+        "start_position": 875,
+        "end_position": 1328,
+        "metadata": {
+          "chunk_index": 3,
+          "length": 453
+        }
+      },
+      {
+        "chunk_id": "chunk_4",
+        "content": "tion of modern AI systems.### Training and TestingModels are trained on historical data and tested on new, unseen data. The training phase involves adjusting model parameters to minimize errors. Testing evaluates how well the model generalizes to new situations.### Overfitting and Underfitting",
+        "start_position": 1278,
+        "end_position": 1572,
+        "metadata": {
+          "chunk_index": 4,
+          "length": 294
+        }
+      },
+      {
+        "chunk_id": "chunk_5",
+        "content": "to new situations.### Overfitting and UnderfittingOverfitting occurs when a model learns training data too well, including noise. Underfitting happens when a model is too simple to capture patterns. Finding the right balance is crucial for model performance.## ConclusionMachine learning continues to evolve and transform industries worldwide. From healthcare to finance, its applications are expanding rapidly. Understanding these fundamentals is essential for anyone entering the field.\n",
+        "start_position": 1522,
+        "end_position": 2011,
+        "metadata": {
+          "chunk_index": 5,
+          "length": 489
+        }
+      }
+    ],
+    "total_chunks": 6,
+    "avg_chunk_size": 376.8333333333333
+  },
+  {
+    "name": "Paragraph - Large chunks",
+    "strategy": "paragraph",
+    "size": 1000,
+    "overlap": 100,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine LearningMachine learning is a subset of artificial intelligence that focuses on building systems that learn from data. These systems improve their performance over time without being explicitly programmed.## Types of Machine LearningThere are three main types of machine learning approaches. Each has its own strengths and use cases.### Supervised LearningSupervised learning uses labeled training data to learn the relationship between inputs and outputs. The algorithm learns from examples where the correct answer is already known. Common applications include spam detection, image classification, and price prediction.### Unsupervised LearningUnsupervised learning works with unlabeled data to find hidden patterns or structures. The algorithm explores the data without predefined categories. Clustering and dimensionality reduction are popular unsupervised techniques.### Reinforcement Learning",
+        "start_position": 0,
+        "end_position": 925,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 925
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "ustering and dimensionality reduction are popular unsupervised techniques.### Reinforcement LearningReinforcement learning trains agents to make decisions through trial and error. The agent receives rewards or penalties based on its actions. This approach is used in robotics, game playing, and autonomous systems.## Key ConceptsUnderstanding machine learning requires familiarity with several fundamental concepts. These building blocks form the foundation of modern AI systems.### Training and TestingModels are trained on historical data and tested on new, unseen data. The training phase involves adjusting model parameters to minimize errors. Testing evaluates how well the model generalizes to new situations.### Overfitting and UnderfittingOverfitting occurs when a model learns training data too well, including noise. Underfitting happens when a model is too simple to capture patterns. Finding the right balance is crucial for model performance.## Conclusion",
+        "start_position": 825,
+        "end_position": 1793,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 968
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "simple to capture patterns. Finding the right balance is crucial for model performance.## ConclusionMachine learning continues to evolve and transform industries worldwide. From healthcare to finance, its applications are expanding rapidly. Understanding these fundamentals is essential for anyone entering the field.\n",
+        "start_position": 1693,
+        "end_position": 2011,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 318
+        }
+      }
+    ],
+    "total_chunks": 3,
+    "avg_chunk_size": 737.0
+  },
+  {
+    "name": "Sentence - Small chunks",
+    "strategy": "sentence",
+    "size": 150,
+    "overlap": 20,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine Learning\n\nMachine learning is a subset of artificial intelligence that focuses on building systems that learn from data.",
+        "start_position": 0,
+        "end_position": 146,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 146
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "hat learn from data.These systems improve their performance over time without being explicitly programmed.",
+        "start_position": 126,
+        "end_position": 232,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 106
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "plicitly programmed.## Types of Machine Learning\n\nThere are three main types of machine learning approaches.Each has its own strengths and use cases.",
+        "start_position": 212,
+        "end_position": 361,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 149
+        }
+      },
+      {
+        "chunk_id": "chunk_3",
+        "content": "ngths and use cases.### Supervised Learning\n\nSupervised learning uses labeled training data to learn the relationship between inputs and outputs.",
+        "start_position": 341,
+        "end_position": 486,
+        "metadata": {
+          "chunk_index": 3,
+          "length": 145
+        }
+      },
+      {
+        "chunk_id": "chunk_4",
+        "content": " inputs and outputs.The algorithm learns from examples where the correct answer is already known.",
+        "start_position": 466,
+        "end_position": 563,
+        "metadata": {
+          "chunk_index": 4,
+          "length": 97
+        }
+      },
+      {
+        "chunk_id": "chunk_5",
+        "content": "er is already known.Common applications include spam detection, image classification, and price prediction.",
+        "start_position": 543,
+        "end_position": 650,
+        "metadata": {
+          "chunk_index": 5,
+          "length": 107
+        }
+      },
+      {
+        "chunk_id": "chunk_6",
+        "content": "nd price prediction.### Unsupervised Learning\n\nUnsupervised learning works with unlabeled data to find hidden patterns or structures.",
+        "start_position": 630,
+        "end_position": 763,
+        "metadata": {
+          "chunk_index": 6,
+          "length": 133
+        }
+      },
+      {
+        "chunk_id": "chunk_7",
+        "content": "terns or structures.The algorithm explores the data without predefined categories.",
+        "start_position": 743,
+        "end_position": 825,
+        "metadata": {
+          "chunk_index": 7,
+          "length": 82
+        }
+      },
+      {
+        "chunk_id": "chunk_8",
+        "content": "edefined categories.Clustering and dimensionality reduction are popular unsupervised techniques.",
+        "start_position": 805,
+        "end_position": 901,
+        "metadata": {
+          "chunk_index": 8,
+          "length": 96
+        }
+      },
+      {
+        "chunk_id": "chunk_9",
+        "content": "pervised techniques.### Reinforcement Learning\n\nReinforcement learning trains agents to make decisions through trial and error.",
+        "start_position": 881,
+        "end_position": 1008,
+        "metadata": {
+          "chunk_index": 9,
+          "length": 127
+        }
+      },
+      {
+        "chunk_id": "chunk_10",
+        "content": "ugh trial and error.The agent receives rewards or penalties based on its actions.",
+        "start_position": 988,
+        "end_position": 1069,
+        "metadata": {
+          "chunk_index": 10,
+          "length": 81
+        }
+      },
+      {
+        "chunk_id": "chunk_11",
+        "content": "ased on its actions.This approach is used in robotics, game playing, and autonomous systems.",
+        "start_position": 1049,
+        "end_position": 1141,
+        "metadata": {
+          "chunk_index": 11,
+          "length": 92
+        }
+      },
+      {
+        "chunk_id": "chunk_12",
+        "content": " autonomous systems.## Key Concepts\n\nUnderstanding machine learning requires familiarity with several fundamental concepts.",
+        "start_position": 1121,
+        "end_position": 1244,
+        "metadata": {
+          "chunk_index": 12,
+          "length": 123
+        }
+      },
+      {
+        "chunk_id": "chunk_13",
+        "content": "undamental concepts.These building blocks form the foundation of modern AI systems.",
+        "start_position": 1224,
+        "end_position": 1307,
+        "metadata": {
+          "chunk_index": 13,
+          "length": 83
+        }
+      },
+      {
+        "chunk_id": "chunk_14",
+        "content": "f modern AI systems.### Training and Testing\n\nModels are trained on historical data and tested on new, unseen data.",
+        "start_position": 1287,
+        "end_position": 1402,
+        "metadata": {
+          "chunk_index": 14,
+          "length": 115
+        }
+      },
+      {
+        "chunk_id": "chunk_15",
+        "content": "on new, unseen data.The training phase involves adjusting model parameters to minimize errors.",
+        "start_position": 1382,
+        "end_position": 1476,
+        "metadata": {
+          "chunk_index": 15,
+          "length": 94
+        }
+      },
+      {
+        "chunk_id": "chunk_16",
+        "content": " to minimize errors.Testing evaluates how well the model generalizes to new situations.",
+        "start_position": 1456,
+        "end_position": 1543,
+        "metadata": {
+          "chunk_index": 16,
+          "length": 87
+        }
+      },
+      {
+        "chunk_id": "chunk_17",
+        "content": "s to new situations.### Overfitting and Underfitting\n\nOverfitting occurs when a model learns training data too well, including noise.",
+        "start_position": 1523,
+        "end_position": 1656,
+        "metadata": {
+          "chunk_index": 17,
+          "length": 133
+        }
+      },
+      {
+        "chunk_id": "chunk_18",
+        "content": "ll, including noise.Underfitting happens when a model is too simple to capture patterns.Finding the right balance is crucial for model performance.",
+        "start_position": 1636,
+        "end_position": 1783,
+        "metadata": {
+          "chunk_index": 18,
+          "length": 147
+        }
+      },
+      {
+        "chunk_id": "chunk_19",
+        "content": "r model performance.## Conclusion\n\nMachine learning continues to evolve and transform industries worldwide.",
+        "start_position": 1763,
+        "end_position": 1870,
+        "metadata": {
+          "chunk_index": 19,
+          "length": 107
+        }
+      },
+      {
+        "chunk_id": "chunk_20",
+        "content": "ndustries worldwide.From healthcare to finance, its applications are expanding rapidly.",
+        "start_position": 1850,
+        "end_position": 1937,
+        "metadata": {
+          "chunk_index": 20,
+          "length": 87
+        }
+      },
+      {
+        "chunk_id": "chunk_21",
+        "content": "e expanding rapidly.Understanding these fundamentals is essential for anyone entering the field.",
+        "start_position": 1917,
+        "end_position": 2013,
+        "metadata": {
+          "chunk_index": 21,
+          "length": 96
+        }
+      }
+    ],
+    "total_chunks": 22,
+    "avg_chunk_size": 110.5909090909091
+  },
+  {
+    "name": "Sentence - Medium chunks",
+    "strategy": "sentence",
+    "size": 300,
+    "overlap": 40,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine Learning\n\nMachine learning is a subset of artificial intelligence that focuses on building systems that learn from data.These systems improve their performance over time without being explicitly programmed.",
+        "start_position": 0,
+        "end_position": 232,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 232
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "ime without being explicitly programmed.## Types of Machine Learning\n\nThere are three main types of machine learning approaches.Each has its own strengths and use cases.### Supervised Learning\n\nSupervised learning uses labeled training data to learn the relationship between inputs and outputs.",
+        "start_position": 192,
+        "end_position": 486,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 294
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "relationship between inputs and outputs.The algorithm learns from examples where the correct answer is already known.Common applications include spam detection, image classification, and price prediction.",
+        "start_position": 446,
+        "end_position": 650,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 204
+        }
+      },
+      {
+        "chunk_id": "chunk_3",
+        "content": "ge classification, and price prediction.### Unsupervised Learning\n\nUnsupervised learning works with unlabeled data to find hidden patterns or structures.The algorithm explores the data without predefined categories.Clustering and dimensionality reduction are popular unsupervised techniques.",
+        "start_position": 610,
+        "end_position": 901,
+        "metadata": {
+          "chunk_index": 3,
+          "length": 291
+        }
+      },
+      {
+        "chunk_id": "chunk_4",
+        "content": "ion are popular unsupervised techniques.### Reinforcement Learning\n\nReinforcement learning trains agents to make decisions through trial and error.The agent receives rewards or penalties based on its actions.This approach is used in robotics, game playing, and autonomous systems.",
+        "start_position": 861,
+        "end_position": 1141,
+        "metadata": {
+          "chunk_index": 4,
+          "length": 280
+        }
+      },
+      {
+        "chunk_id": "chunk_5",
+        "content": "s, game playing, and autonomous systems.## Key Concepts\n\nUnderstanding machine learning requires familiarity with several fundamental concepts.These building blocks form the foundation of modern AI systems.",
+        "start_position": 1101,
+        "end_position": 1307,
+        "metadata": {
+          "chunk_index": 5,
+          "length": 206
+        }
+      },
+      {
+        "chunk_id": "chunk_6",
+        "content": "orm the foundation of modern AI systems.### Training and Testing\n\nModels are trained on historical data and tested on new, unseen data.The training phase involves adjusting model parameters to minimize errors.Testing evaluates how well the model generalizes to new situations.",
+        "start_position": 1267,
+        "end_position": 1543,
+        "metadata": {
+          "chunk_index": 6,
+          "length": 276
+        }
+      },
+      {
+        "chunk_id": "chunk_7",
+        "content": "the model generalizes to new situations.### Overfitting and Underfitting\n\nOverfitting occurs when a model learns training data too well, including noise.Underfitting happens when a model is too simple to capture patterns.Finding the right balance is crucial for model performance.",
+        "start_position": 1503,
+        "end_position": 1783,
+        "metadata": {
+          "chunk_index": 7,
+          "length": 280
+        }
+      },
+      {
+        "chunk_id": "chunk_8",
+        "content": "alance is crucial for model performance.## Conclusion\n\nMachine learning continues to evolve and transform industries worldwide.From healthcare to finance, its applications are expanding rapidly.Understanding these fundamentals is essential for anyone entering the field.",
+        "start_position": 1743,
+        "end_position": 2013,
+        "metadata": {
+          "chunk_index": 8,
+          "length": 270
+        }
+      }
+    ],
+    "total_chunks": 9,
+    "avg_chunk_size": 259.22222222222223
+  },
+  {
+    "name": "Word - Very small chunks",
+    "strategy": "word",
+    "size": 100,
+    "overlap": 15,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine Learning Machine learning is a subset of artificial intelligence that",
+        "start_position": 0,
+        "end_position": 95,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 95
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "telligence that focuses on building systems that learn from data. These systems improve their",
+        "start_position": 80,
+        "end_position": 173,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 93
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "s improve their performance over time without being explicitly programmed. ## Types of Machine",
+        "start_position": 158,
+        "end_position": 252,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 94
+        }
+      },
+      {
+        "chunk_id": "chunk_3",
+        "content": "ypes of Machine Learning There are three main types of machine learning approaches. Each has its own",
+        "start_position": 237,
+        "end_position": 337,
+        "metadata": {
+          "chunk_index": 3,
+          "length": 100
+        }
+      },
+      {
+        "chunk_id": "chunk_4",
+        "content": "ach has its own strengths and use cases. ### Supervised Learning Supervised learning uses labeled",
+        "start_position": 322,
+        "end_position": 419,
+        "metadata": {
+          "chunk_index": 4,
+          "length": 97
+        }
+      },
+      {
+        "chunk_id": "chunk_5",
+        "content": "ng uses labeled training data to learn the relationship between inputs and outputs. The algorithm",
+        "start_position": 404,
+        "end_position": 501,
+        "metadata": {
+          "chunk_index": 5,
+          "length": 97
+        }
+      },
+      {
+        "chunk_id": "chunk_6",
+        "content": ". The algorithm learns from examples where the correct answer is already known. Common applications",
+        "start_position": 486,
+        "end_position": 585,
+        "metadata": {
+          "chunk_index": 6,
+          "length": 99
+        }
+      },
+      {
+        "chunk_id": "chunk_7",
+        "content": "on applications include spam detection, image classification, and price prediction. ### Unsupervised",
+        "start_position": 570,
+        "end_position": 670,
+        "metadata": {
+          "chunk_index": 7,
+          "length": 100
+        }
+      },
+      {
+        "chunk_id": "chunk_8",
+        "content": "## Unsupervised Learning Unsupervised learning works with unlabeled data to find hidden patterns or",
+        "start_position": 655,
+        "end_position": 754,
+        "metadata": {
+          "chunk_index": 8,
+          "length": 99
+        }
+      },
+      {
+        "chunk_id": "chunk_9",
+        "content": "den patterns or structures. The algorithm explores the data without predefined categories.",
+        "start_position": 739,
+        "end_position": 829,
+        "metadata": {
+          "chunk_index": 9,
+          "length": 90
+        }
+      },
+      {
+        "chunk_id": "chunk_10",
+        "content": "ned categories. Clustering and dimensionality reduction are popular unsupervised techniques. ###",
+        "start_position": 814,
+        "end_position": 910,
+        "metadata": {
+          "chunk_index": 10,
+          "length": 96
+        }
+      },
+      {
+        "chunk_id": "chunk_11",
+        "content": "techniques. ### Reinforcement Learning Reinforcement learning trains agents to make decisions",
+        "start_position": 895,
+        "end_position": 988,
+        "metadata": {
+          "chunk_index": 11,
+          "length": 93
+        }
+      },
+      {
+        "chunk_id": "chunk_12",
+        "content": " make decisions through trial and error. The agent receives rewards or penalties based on its",
+        "start_position": 973,
+        "end_position": 1066,
+        "metadata": {
+          "chunk_index": 12,
+          "length": 93
+        }
+      },
+      {
+        "chunk_id": "chunk_13",
+        "content": "es based on its actions. This approach is used in robotics, game playing, and autonomous systems. ##",
+        "start_position": 1051,
+        "end_position": 1151,
+        "metadata": {
+          "chunk_index": 13,
+          "length": 100
+        }
+      },
+      {
+        "chunk_id": "chunk_14",
+        "content": "ous systems. ## Key Concepts Understanding machine learning requires familiarity with several",
+        "start_position": 1136,
+        "end_position": 1229,
+        "metadata": {
+          "chunk_index": 14,
+          "length": 93
+        }
+      },
+      {
+        "chunk_id": "chunk_15",
+        "content": "ty with several fundamental concepts. These building blocks form the foundation of modern AI",
+        "start_position": 1214,
+        "end_position": 1306,
+        "metadata": {
+          "chunk_index": 15,
+          "length": 92
+        }
+      },
+      {
+        "chunk_id": "chunk_16",
+        "content": "on of modern AI systems. ### Training and Testing Models are trained on historical data and tested",
+        "start_position": 1291,
+        "end_position": 1389,
+        "metadata": {
+          "chunk_index": 16,
+          "length": 98
+        }
+      },
+      {
+        "chunk_id": "chunk_17",
+        "content": "data and tested on new, unseen data. The training phase involves adjusting model parameters to",
+        "start_position": 1374,
+        "end_position": 1468,
+        "metadata": {
+          "chunk_index": 17,
+          "length": 94
+        }
+      },
+      {
+        "chunk_id": "chunk_18",
+        "content": "l parameters to minimize errors. Testing evaluates how well the model generalizes to new situations.",
+        "start_position": 1453,
+        "end_position": 1553,
+        "metadata": {
+          "chunk_index": 18,
+          "length": 100
+        }
+      },
+      {
+        "chunk_id": "chunk_19",
+        "content": "new situations. ### Overfitting and Underfitting Overfitting occurs when a model learns training",
+        "start_position": 1538,
+        "end_position": 1634,
+        "metadata": {
+          "chunk_index": 19,
+          "length": 96
+        }
+      },
+      {
+        "chunk_id": "chunk_20",
+        "content": "learns training data too well, including noise. Underfitting happens when a model is too simple to",
+        "start_position": 1619,
+        "end_position": 1717,
+        "metadata": {
+          "chunk_index": 20,
+          "length": 98
+        }
+      },
+      {
+        "chunk_id": "chunk_21",
+        "content": "s too simple to capture patterns. Finding the right balance is crucial for model performance. ##",
+        "start_position": 1702,
+        "end_position": 1798,
+        "metadata": {
+          "chunk_index": 21,
+          "length": 96
+        }
+      },
+      {
+        "chunk_id": "chunk_22",
+        "content": "performance. ## Conclusion Machine learning continues to evolve and transform industries worldwide.",
+        "start_position": 1783,
+        "end_position": 1882,
+        "metadata": {
+          "chunk_index": 22,
+          "length": 99
+        }
+      },
+      {
+        "chunk_id": "chunk_23",
+        "content": "ries worldwide. From healthcare to finance, its applications are expanding rapidly. Understanding",
+        "start_position": 1867,
+        "end_position": 1964,
+        "metadata": {
+          "chunk_index": 23,
+          "length": 97
+        }
+      },
+      {
+        "chunk_id": "chunk_24",
+        "content": ". Understanding these fundamentals is essential for anyone entering the field.",
+        "start_position": 1949,
+        "end_position": 2027,
+        "metadata": {
+          "chunk_index": 24,
+          "length": 78
+        }
+      }
+    ],
+    "total_chunks": 25,
+    "avg_chunk_size": 95.48
+  },
+  {
+    "name": "Word - Small chunks",
+    "strategy": "word",
+    "size": 200,
+    "overlap": 25,
+    "chunks": [
+      {
+        "chunk_id": "chunk_0",
+        "content": "# Introduction to Machine Learning Machine learning is a subset of artificial intelligence that focuses on building systems that learn from data. These systems improve their performance over time",
+        "start_position": 0,
+        "end_position": 195,
+        "metadata": {
+          "chunk_index": 0,
+          "length": 195
+        }
+      },
+      {
+        "chunk_id": "chunk_1",
+        "content": "eir performance over time without being explicitly programmed. ## Types of Machine Learning There are three main types of machine learning approaches. Each has its own strengths and use cases. ###",
+        "start_position": 170,
+        "end_position": 366,
+        "metadata": {
+          "chunk_index": 1,
+          "length": 196
+        }
+      },
+      {
+        "chunk_id": "chunk_2",
+        "content": "engths and use cases. ### Supervised Learning Supervised learning uses labeled training data to learn the relationship between inputs and outputs. The algorithm learns from examples where the correct",
+        "start_position": 341,
+        "end_position": 540,
+        "metadata": {
+          "chunk_index": 2,
+          "length": 199
+        }
+      },
+      {
+        "chunk_id": "chunk_3",
+        "content": "xamples where the correct answer is already known. Common applications include spam detection, image classification, and price prediction. ### Unsupervised Learning Unsupervised learning works with",
+        "start_position": 515,
+        "end_position": 712,
+        "metadata": {
+          "chunk_index": 3,
+          "length": 197
+        }
+      },
+      {
+        "chunk_id": "chunk_4",
+        "content": "vised learning works with unlabeled data to find hidden patterns or structures. The algorithm explores the data without predefined categories. Clustering and dimensionality reduction are popular",
+        "start_position": 687,
+        "end_position": 881,
+        "metadata": {
+          "chunk_index": 4,
+          "length": 194
+        }
+      },
+      {
+        "chunk_id": "chunk_5",
+        "content": "ity reduction are popular unsupervised techniques. ### Reinforcement Learning Reinforcement learning trains agents to make decisions through trial and error. The agent receives rewards or penalties",
+        "start_position": 856,
+        "end_position": 1053,
+        "metadata": {
+          "chunk_index": 5,
+          "length": 197
+        }
+      },
+      {
+        "chunk_id": "chunk_6",
+        "content": "ives rewards or penalties based on its actions. This approach is used in robotics, game playing, and autonomous systems. ## Key Concepts Understanding machine learning requires familiarity with",
+        "start_position": 1028,
+        "end_position": 1221,
+        "metadata": {
+          "chunk_index": 6,
+          "length": 193
+        }
+      },
+      {
+        "chunk_id": "chunk_7",
+        "content": "requires familiarity with several fundamental concepts. These building blocks form the foundation of modern AI systems. ### Training and Testing Models are trained on historical data and tested on",
+        "start_position": 1196,
+        "end_position": 1392,
+        "metadata": {
+          "chunk_index": 7,
+          "length": 196
+        }
+      },
+      {
+        "chunk_id": "chunk_8",
+        "content": "orical data and tested on new, unseen data. The training phase involves adjusting model parameters to minimize errors. Testing evaluates how well the model generalizes to new situations. ###",
+        "start_position": 1367,
+        "end_position": 1557,
+        "metadata": {
+          "chunk_index": 8,
+          "length": 190
+        }
+      },
+      {
+        "chunk_id": "chunk_9",
+        "content": "es to new situations. ### Overfitting and Underfitting Overfitting occurs when a model learns training data too well, including noise. Underfitting happens when a model is too simple to capture",
+        "start_position": 1532,
+        "end_position": 1725,
+        "metadata": {
+          "chunk_index": 9,
+          "length": 193
+        }
+      },
+      {
+        "chunk_id": "chunk_10",
+        "content": " is too simple to capture patterns. Finding the right balance is crucial for model performance. ## Conclusion Machine learning continues to evolve and transform industries worldwide. From healthcare",
+        "start_position": 1700,
+        "end_position": 1898,
+        "metadata": {
+          "chunk_index": 10,
+          "length": 198
+        }
+      },
+      {
+        "chunk_id": "chunk_11",
+        "content": "orldwide. From healthcare to finance, its applications are expanding rapidly. Understanding these fundamentals is essential for anyone entering the field.",
+        "start_position": 1873,
+        "end_position": 2027,
+        "metadata": {
+          "chunk_index": 11,
+          "length": 154
+        }
+      }
+    ],
+    "total_chunks": 12,
+    "avg_chunk_size": 191.83333333333334
+  }
+]

@@ -1,0 +1,50 @@
+# FastAPI
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Pydantic
+pydantic==2.5.0
+pydantic-core==2.14.1
+pydantic-settings==2.1.0
+
+# LangChain - 버전 고정
+langchain==0.2.17
+langchain-core==0.2.43
+langchain-openai==0.1.25
+langchain-community==0.2.19
+langchain-text-splitters==0.2.4
+
+# OpenAI
+openai==1.40.0
+
+# Transformers - 호환 버전 (수정!)
+transformers==4.44.2
+tokenizers==0.19.1
+sentence-transformers==3.0.1
+torch==2.3.1
+
+# Core dependencies
+packaging==24.1
+numpy==1.26.4
+
+# Storage
+qdrant-client==1.9.1
+neo4j==5.15.0
+psycopg2-binary==2.9.9
+
+# Excel
+openpyxl==3.1.2
+pandas==2.1.4
+
+# ML
+scikit-learn==1.5.1
+
+# Utils
+aiofiles==23.2.1
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2

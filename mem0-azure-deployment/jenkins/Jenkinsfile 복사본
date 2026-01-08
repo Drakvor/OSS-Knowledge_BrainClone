@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code from GitLab...'
+                sh 'ls -la'
+            }
+        }
+        
+        stage('Build Info') {
+            steps {
+                echo 'Building MEM0 Docker image...'
+                sh 'cat Dockerfile.azure'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Running basic tests...'
+                sh 'echo "Pipeline is working!"'
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+    }
+}

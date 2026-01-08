@@ -1,0 +1,111 @@
+# GitLab CI/CD Pipeline for MEM0 Azure Deployment
+
+stages:
+  - validate
+  - security
+  - trigger-jenkins
+  - notify
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+# 코드 검증 단계
+validate:
+  stage: validate
+  image: python:3.11-slim
+  before_script:
+    - pip install -r requirements.txt
+    - pip install flake8 black pytest
+  script:
+    - echo "🔍 코드 품질 검사 중..."
+    - flake8 src/ --max-line-length=88 --exclude=__pycache__ || true
+    - black --check src/ || true
+    - echo "✅ 코드 품질 검사 완료"
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# 보안 스캔
+security-scan:
+  stage: security
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache grep
+  script:
+    - echo "🔒 보안 스캔 중..."
+    - |
+      if grep -r "password\|secret\|key\|token" --include="*.py" --include="*.yaml" --exclude-dir=".git" . | grep -v "template\|example\|TODO"; then
+        echo "⚠️ WARNING: 잠재적 시크릿이 발견되었습니다"
+        echo "다음 패턴들을 확인해주세요:"
+        grep -r "password\|secret\|key\|token" --include="*.py" --include="*.yaml" --exclude-dir=".git" . | grep -v "template\|example\|TODO" || true
+      fi
+    - echo "✅ 보안 스캔 완료"
+  only:
+    - merge_requests
+    - main
+    - develop
+
+# Jenkins 빌드 트리거
+trigger-jenkins:
+  stage: trigger-jenkins
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "🚀 Jenkins 파이프라인 트리거 중..."
+    - |
+      RESPONSE=$(curl -w "%{http_code}" -s -X POST \
+        -H "Authorization: Bearer ${JENKINS_API_TOKEN}" \
+        "${JENKINS_URL}/job/mem0-build-pipeline/buildWithParameters" \
+        --data-urlencode "GIT_COMMIT=${CI_COMMIT_SHA}" \
+        --data-urlencode "GIT_BRANCH=${CI_COMMIT_REF_NAME}" \
+        --data-urlencode "GITLAB_PROJECT_ID=${CI_PROJECT_ID}" \
+        --data-urlencode "GITLAB_PIPELINE_ID=${CI_PIPELINE_ID}")
+      
+      HTTP_CODE="${RESPONSE: -3}"
+      if [ "$HTTP_CODE" -eq 201 ] || [ "$HTTP_CODE" -eq 200 ]; then
+        echo "✅ Jenkins 빌드가 성공적으로 트리거되었습니다"
+        echo "Jenkins URL: ${JENKINS_URL}/job/mem0-build-pipeline/"
+      else
+        echo "❌ Jenkins 빌드 트리거 실패: HTTP $HTTP_CODE"
+        exit 1
+      fi
+  only:
+    - main
+    - develop
+  when: manual
+
+# 알림 전송
+notify-success:
+  stage: notify
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "📢 성공 알림 전송 중..."
+    - |
+      curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"✅ MEM0 GitLab Pipeline 성공!\n브랜치: ${CI_COMMIT_REF_NAME}\n커밋: ${CI_COMMIT_SHORT_SHA}\n파이프라인: ${CI_PIPELINE_URL}\"}" \
+        "${SLACK_WEBHOOK_URL}" || echo "Slack 알림 실패 (선택사항)"
+  only:
+    - main
+    - develop
+  when: on_success
+
+notify-failure:
+  stage: notify
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "📢 실패 알림 전송 중..."
+    - |
+      curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"❌ MEM0 GitLab Pipeline 실패!\n브랜치: ${CI_COMMIT_REF_NAME}\n커밋: ${CI_COMMIT_SHORT_SHA}\n파이프라인: ${CI_PIPELINE_URL}\"}" \
+        "${SLACK_WEBHOOK_URL}" || echo "Slack 알림 실패 (선택사항)"
+  only:
+    - main
+    - develop
+  when: on_failure
