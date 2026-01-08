@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: intent-classifier
+spec:
+    replicas: 2
+    template:
+        spec:
+            containers:
+                - name: intent-classifier
+                  resources:
+                      requests:
+                          memory: "512Mi"
+                          cpu: "250m"
+                      limits:
+                          memory: "2Gi"
+                          cpu: "1000m"

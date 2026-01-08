@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: context-manager
+    labels:
+        app: context-manager
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: context-manager
+    template:
+        metadata:
+            labels:
+                app: context-manager
+        spec:
+            containers:
+                - name: context-manager
+                  image: oss-knowledge-context-manager:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 8005
+                  env:
+                      - name: APP_NAME
+                        value: "OSS Knowledge Context Manager"
+                      - name: DEBUG
+                        value: "false"
+                      - name: LOG_LEVEL
+                        value: "INFO"
+                      - name: HOST
+                        value: "0.0.0.0"
+                      - name: PORT
+                        value: "8005"
+                      - name: BACKEND_SERVICE_URL
+                        value: "http://meta-api.oss-knowledge-backend:8080"
+                      - name: MEM0_SERVICE_URL
+                        value: "http://mem0-service.oss-knowledge-mem0-dev:80"
+                      - name: OPENAI_API_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: api-keys
+                                key: gpt-api-key
+                      - name: AZURE_OPENAI_ENDPOINT
+                        value: "https://multiagent-openai-service.openai.azure.com/"
+                      - name: AZURE_OPENAI_API_VERSION
+                        value: "2024-12-01-preview"
+                      - name: AZURE_OPENAI_DEPLOYMENT
+                        value: "gpt-4.1-mini"
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "125m"
+                      limits:
+                          memory: "512Mi"
+                          cpu: "250m"
+                  livenessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8005
+                      initialDelaySeconds: 30
+                      periodSeconds: 30
+                  readinessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8005
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
+

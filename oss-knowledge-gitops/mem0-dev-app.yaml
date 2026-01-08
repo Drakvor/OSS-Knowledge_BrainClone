@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oss-knowledge-mem0-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+    targetRevision: HEAD
+    path: backend/mem0/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oss-knowledge-mem0-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true

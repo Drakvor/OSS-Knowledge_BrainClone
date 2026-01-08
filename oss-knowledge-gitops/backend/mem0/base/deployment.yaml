@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mem0-app
+  namespace: oss-knowledge-mem0-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mem0-app
+  template:
+    metadata:
+      labels:
+        app: mem0-app
+    spec:
+      containers:
+      - name: mem0-app
+        image: mem0-app
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: AZURE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mem0-secrets
+              key: AZURE_API_KEY
+        - name: AZURE_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: mem0-secrets
+              key: AZURE_ENDPOINT
+        - name: AZURE_API_VERSION
+          valueFrom:
+            secretKeyRef:
+              name: mem0-secrets
+              key: AZURE_API_VERSION
+        - name: AZURE_DEPLOYMENT
+          valueFrom:
+            secretKeyRef:
+              name: mem0-secrets
+              key: AZURE_DEPLOYMENT

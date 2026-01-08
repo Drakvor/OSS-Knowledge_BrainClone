@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: oss-knowledge-intent-classifier-prod
+
+resources:
+    - ../../base
+
+patchesStrategicMerge:
+    - deployment-patch.yaml
+
+images:
+    - name: oss-knowledge-intent-classifier
+      newName: ossknowledgeregistry.azurecr.io/oss-knowledge-intent-classifier
+      newTag: latest
+
+namePrefix: prod-

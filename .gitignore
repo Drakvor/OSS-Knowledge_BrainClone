@@ -1,14 +1,13 @@
-# Sub-repositories (each has its own git repo)
-oss-knowledge-backend/
-oss-knowledge-context-manager/
-oss-knowledge-embedding-server/
-oss-knowledge-front-gitlab/
-oss-knowledge-gitops/
-oss-knowledge-intent-classifier/
-oss-knowledge-orchestrator/
-oss-knowledge-search/
-oss-knowledge-task-planner/
-mem0-azure-deployment/
+# Ignore .git directories in sub-repositories (but include the code)
+**/.git/
+# Ignore build artifacts and dependencies in sub-repos
+**/target/
+**/dist/
+**/build/
+**/node_modules/
+**/venv/
+**/__pycache__/
+**/*.pyc
 
 # Logs and temporary files
 logs/

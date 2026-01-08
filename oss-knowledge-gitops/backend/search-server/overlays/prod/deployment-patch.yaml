@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: search-server
+spec:
+    replicas: 2
+    template:
+        spec:
+            containers:
+                - name: search-server
+                  image: oss-knowledge-search-server:latest
+                  env:
+                      - name: DEBUG
+                        value: "false"
+                      - name: LOG_LEVEL
+                        value: "INFO"
+                      - name: QDRANT_HOST
+                        value: "20.249.165.27"
+                      - name: QDRANT_PORT
+                        value: "6333"
+                  resources:
+                      requests:
+                          memory: "512Mi"
+                          cpu: "250m"
+                      limits:
+                          memory: "2Gi"
+                          cpu: "1000m"

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oss-knowledge-search-server-prod
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+    targetRevision: main
+    path: backend/search-server/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oss-knowledge-search-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+  revisionHistoryLimit: 10

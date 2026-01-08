@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: orchestrator
+spec:
+    replicas: 1
+    template:
+        spec:
+            containers:
+                - name: orchestrator
+                  image: oss-knowledge-orchestrator:dev
+                  env:
+                      - name: DEBUG
+                        value: "true"
+                      - name: LOG_LEVEL
+                        value: "DEBUG"
+                      - name: USE_TASK_PLANNER
+                        value: "true"
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "125m"
+                      limits:
+                          memory: "512Mi"
+                          cpu: "250m"
+

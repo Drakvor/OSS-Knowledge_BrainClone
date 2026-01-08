@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: task-planner
+spec:
+    replicas: 1
+    template:
+        spec:
+            containers:
+                - name: task-planner
+                  image: oss-knowledge-task-planner:dev
+                  env:
+                      - name: DEBUG
+                        value: "true"
+                      - name: LOG_LEVEL
+                        value: "DEBUG"
+                      - name: USE_DIRECT_INTEGRATION
+                        value: "true"
+                  resources:
+                      requests:
+                          memory: "512Mi"
+                          cpu: "250m"
+                      limits:
+                          memory: "1Gi"
+                          cpu: "500m"
+

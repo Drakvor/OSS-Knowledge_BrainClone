@@ -1,0 +1,324 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-front-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: front/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-front-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-front-prod
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: front/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-front-prod
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-meta-api-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/meta-api/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-embedding-server-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/embedding-server/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-embedding-server-prod
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/embedding-server/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-prod
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-orchestrator-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/orchestrator/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-orchestrator-prod
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/orchestrator/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-prod
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-context-manager-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/context-manager/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-context-manager-prod
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/context-manager/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-prod
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-task-planner-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/task-planner/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: oss-knowledge-task-planner-prod
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/task-planner/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-backend-prod
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: intent-classifier-dev
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/intent-classifier/overlays/dev
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-intent-classifier-dev
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: intent-classifier-prod
+    namespace: argocd
+    finalizers:
+        - resources-finalizer.argocd.argoproj.io
+spec:
+    project: default
+    source:
+        repoURL: https://gitlab.4.230.158.187.nip.io/oss-ai-vtf/oss-knowledge-gitops.git
+        targetRevision: HEAD
+        path: backend/intent-classifier/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: oss-knowledge-intent-classifier-prod
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
+            - PrunePropagationPolicy=foreground
+            - PruneLast=true

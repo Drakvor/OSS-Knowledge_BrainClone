@@ -1,0 +1,66 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: oss-knowledge-backend-dev
+
+resources:
+- ../../base
+
+images:
+- name: oss-knowledge-meta-api
+  newName: ossknowledgeregistry.azurecr.io/oss-knowledge-meta-api
+  newTag: 35-latest
+
+patches:
+- target:
+    kind: Ingress
+    name: oss-knowledge-meta-api
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: oss-knowledge-meta-api-dev.4.230.158.187.nip.io
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1enable-cors
+      value: "true"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1cors-allow-origin
+      value: "http://oss-knowledge-front-dev.4.230.158.187.nip.io"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1cors-allow-methods
+      value: "GET,POST,PUT,DELETE,OPTIONS"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1cors-allow-headers
+      value: "Authorization,Content-Type,X-Request-Id,X-Session-Id"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1cors-expose-headers
+      value: "X-Request-Id"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1cors-allow-credentials
+      value: "true"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1proxy-read-timeout
+      value: "3600"
+    - op: add
+      path: /metadata/annotations/nginx.ingress.kubernetes.io~1proxy-send-timeout
+      value: "3600"
+
+- target:
+    kind: Secret
+    name: oss-knowledge-meta-api-secret
+  patch: |-
+    - op: add
+      path: /stringData/DB_URL
+      value: jdbc:postgresql://localhost:5432/oss_knowledge
+    - op: replace
+      path: /stringData/DB_USERNAME
+      value: oss
+    - op: replace
+      path: /stringData/DB_PASSWORD
+      value: changeme
+    - op: replace
+      path: /stringData/JWT_SECRET
+      value: dev-change-me-32bytes-minimum-abcdef0123456789
+
+commonLabels:
+  app: oss-knowledge-meta-api
+  environment: dev

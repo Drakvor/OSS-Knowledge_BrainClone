@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: search-server
+spec:
+  rules:
+  - host: oss-knowledge-search-dev.4.230.158.187.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: dev-search-server
+            port:
+              number: 8002

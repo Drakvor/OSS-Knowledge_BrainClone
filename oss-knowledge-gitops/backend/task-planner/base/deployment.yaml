@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: task-planner
+    labels:
+        app: task-planner
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: task-planner
+    template:
+        metadata:
+            labels:
+                app: task-planner
+        spec:
+            containers:
+                - name: task-planner
+                  image: oss-knowledge-task-planner:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 8004
+                  env:
+                      - name: APP_NAME
+                        value: "OSS Knowledge Task Planner"
+                      - name: DEBUG
+                        value: "false"
+                      - name: LOG_LEVEL
+                        value: "INFO"
+                      - name: HOST
+                        value: "0.0.0.0"
+                      - name: PORT
+                        value: "8004"
+                      - name: SEARCH_SERVER_URL
+                        value: "http://search-server.oss-knowledge-backend:8002"
+                      - name: USE_DIRECT_INTEGRATION
+                        value: "false"
+                      - name: QDRANT_HOST
+                        value: "20.249.165.27"
+                      - name: QDRANT_PORT
+                        value: "6333"
+                      - name: NEO4J_URI
+                        value: "neo4j://localhost:7687"
+                      - name: NEO4J_USERNAME
+                        value: "neo4j"
+                      - name: NEO4J_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: neo4j-auth
+                                key: password
+                      - name: OPENAI_API_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: api-keys
+                                key: gpt-api-key
+                      - name: AZURE_OPENAI_ENDPOINT
+                        value: "https://multiagent-openai-service.openai.azure.com/"
+                      - name: AZURE_OPENAI_API_VERSION
+                        value: "2024-12-01-preview"
+                      - name: AZURE_OPENAI_DEPLOYMENT
+                        value: "gpt-4.1-mini"
+                  resources:
+                      requests:
+                          memory: "512Mi"
+                          cpu: "250m"
+                      limits:
+                          memory: "1Gi"
+                          cpu: "500m"
+                  livenessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8004
+                      initialDelaySeconds: 30
+                      periodSeconds: 30
+                  readinessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8004
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
+

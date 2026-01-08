@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oss-knowledge-front-config
+  namespace: oss-knowledge-front
+  labels:
+    app: oss-knowledge-front
+data:
+  VITE_API_BASE_URL: "http://oss-knowledge-meta-api-dev.4.230.158.187.nip.io"
+  VITE_EMBEDDING_API_BASE_URL: "http://oss-knowledge-embedding-dev.4.230.158.187.nip.io"
+  VITE_SEARCH_API_BASE_URL: "http://oss-knowledge-search-dev.4.230.158.187.nip.io"

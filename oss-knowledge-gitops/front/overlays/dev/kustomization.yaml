@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+
+namespace: oss-knowledge-front-dev
+
+images:
+- name: oss-knowledge-front
+  newName: ossknowledgeregistry.azurecr.io/oss-knowledge-front
+  newTag: 76-latest
+
+commonLabels:
+  environment: dev

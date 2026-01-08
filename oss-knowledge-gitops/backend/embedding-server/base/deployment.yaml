@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: embedding-server
+  labels:
+    app: embedding-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: embedding-server
+  template:
+    metadata:
+      labels:
+        app: embedding-server
+    spec:
+      containers:
+      - name: embedding-server
+        image: oss-knowledge-embedding-server:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: APP_NAME
+          value: "OSS Knowledge Embedding Server"
+        - name: DEBUG
+          value: "false"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "8000"
+        - name: QDRANT_HOST
+          value: "20.249.165.27"
+        - name: QDRANT_PORT
+          value: "6333"
+        - name: NEO4J_URI
+          value: "neo4j://20.249.160.53:7687"
+        - name: NEO4J_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: neo4j-auth
+              key: username
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: neo4j-auth
+              key: password
+        - name: VECTOR_SIZE
+          value: "3072"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-keys
+              key: gpt-api-key
+        - name: AZURE_OPENAI_ENDPOINT
+          value: "https://multiagent-openai-service.openai.azure.com/"
+        - name: AZURE_OPENAI_API_VERSION
+          value: "2024-12-01-preview"
+        - name: AZURE_EMBEDDING_DEPLOYMENT
+          value: "oss-embedding"
+        - name: AZURE_EMBEDDING_MODEL
+          value: "text-embedding-3-large"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5

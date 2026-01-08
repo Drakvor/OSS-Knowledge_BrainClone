@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oss-knowledge-meta-api
+  labels:
+    app: oss-knowledge-meta-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: oss-knowledge-meta-api
+  template:
+    metadata:
+      labels:
+        app: oss-knowledge-meta-api
+    spec:
+      containers:
+      - name: oss-knowledge-meta-api
+        image: oss-knowledge-meta-api:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: oss-knowledge-meta-api-config
+        - secretRef:
+            name: oss-knowledge-meta-api-secret
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 30
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/data/uploads
+      volumes:
+      - name: uploads
+        emptyDir: {}

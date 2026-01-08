@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: search-server
+    labels:
+        app: search-server
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: search-server
+    template:
+        metadata:
+            labels:
+                app: search-server
+        spec:
+            containers:
+                - name: search-server
+                  image: oss-knowledge-search-server:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 8002
+                  env:
+                      - name: APP_NAME
+                        value: "OSS Knowledge Search Server"
+                      - name: DEBUG
+                        value: "false"
+                      - name: LOG_LEVEL
+                        value: "INFO"
+                      - name: HOST
+                        value: "0.0.0.0"
+                      - name: PORT
+                        value: "8002"
+                      - name: QDRANT_HOST
+                        value: "20.249.165.27"
+                      - name: QDRANT_PORT
+                        value: "6333"
+                      - name: QDRANT_COLLECTION
+                        value: "general"
+                      - name: POSTGRES_HOST
+                        value: "localhost"
+                      - name: POSTGRES_PORT
+                        value: "5432"
+                      - name: POSTGRES_DATABASE
+                        value: "oss_knowledge"
+                      - name: POSTGRES_USER
+                        value: "oss"
+                      - name: POSTGRES_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: postgres-auth
+                                key: password
+                      - name: VECTOR_SIZE
+                        value: "3072"
+                      - name: DEFAULT_SEARCH_LIMIT
+                        value: "10"
+                      - name: MAX_SEARCH_LIMIT
+                        value: "100"
+                      - name: DEFAULT_SIMILARITY_THRESHOLD
+                        value: "0.7"
+                      - name: OPENAI_API_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: api-keys
+                                key: gpt-api-key
+                      - name: AZURE_OPENAI_ENDPOINT
+                        value: "https://multiagent-openai-service.openai.azure.com/"
+                      - name: AZURE_OPENAI_API_VERSION
+                        value: "2024-12-01-preview"
+                      - name: AZURE_EMBEDDING_DEPLOYMENT
+                        value: "oss-embedding"
+                      - name: AZURE_EMBEDDING_MODEL
+                        value: "text-embedding-3-large"
+                      - name: MEM0_BASE_URL
+                        value: "http://mem0-service.oss-knowledge-mem0-dev:80"
+                      - name: MEM0_ENABLED
+                        value: "true"
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "125m"
+                      limits:
+                          memory: "1Gi"
+                          cpu: "500m"
+                  livenessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8002
+                      initialDelaySeconds: 30
+                      periodSeconds: 30
+                  readinessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8002
+                      initialDelaySeconds: 5
+                      periodSeconds: 5

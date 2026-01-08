@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: intent-classifier
+    labels:
+        app: intent-classifier
+    annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+    ingressClassName: nginx
+    rules:
+        - host: oss-knowledge-intent-classifier.4.230.158.187.nip.io
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: intent-classifier
+                            port:
+                                number: 8001

@@ -1,0 +1,14 @@
+{
+  "benchmark_summary": {
+    "total_tests": 0,
+    "strategies_tested": 0,
+    "fusion_configs_tested": 0,
+    "documents_tested": 0,
+    "timestamp": "2025-09-05T09:29:36.345336"
+  },
+  "accuracy_rankings": [],
+  "performance_rankings": [],
+  "fusion_config_analysis": {},
+  "strategy_analysis": {},
+  "detailed_results": []
+}

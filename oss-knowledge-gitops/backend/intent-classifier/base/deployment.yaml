@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: intent-classifier
+    labels:
+        app: intent-classifier
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: intent-classifier
+    template:
+        metadata:
+            labels:
+                app: intent-classifier
+        spec:
+            containers:
+                - name: intent-classifier
+                  image: oss-knowledge-intent-classifier:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 8001
+                  env:
+                      - name: APP_NAME
+                        value: "OSS Knowledge Intent Classifier"
+                      - name: DEBUG
+                        value: "false"
+                      - name: LOG_LEVEL
+                        value: "INFO"
+                      - name: HOST
+                        value: "0.0.0.0"
+                      - name: PORT
+                        value: "8001"
+                      - name: SEARCH_SERVER_URL
+                        value: "http://oss-knowledge-search-dev.4.230.158.187.nip.io"
+                      - name: OPENAI_API_KEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: api-keys
+                                key: gpt-api-key
+                      - name: AZURE_OPENAI_ENDPOINT
+                        value: "https://multiagent-openai-service.openai.azure.com/"
+                      - name: AZURE_OPENAI_API_VERSION
+                        value: "2024-12-01-preview"
+                      - name: AZURE_LLM_DEPLOYMENT
+                        value: "gpt-4.1-mini"
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "125m"
+                      limits:
+                          memory: "1Gi"
+                          cpu: "500m"
+                  livenessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8001
+                      initialDelaySeconds: 30
+                      periodSeconds: 30
+                  readinessProbe:
+                      httpGet:
+                          path: /health
+                          port: 8001
+                      initialDelaySeconds: 5
+                      periodSeconds: 5

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: embedding-server
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: embedding-server
+        image: oss-knowledge-embedding-server:latest
+        env:
+        - name: DEBUG
+          value: "false"
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "8Gi"
+            cpu: "4000m"

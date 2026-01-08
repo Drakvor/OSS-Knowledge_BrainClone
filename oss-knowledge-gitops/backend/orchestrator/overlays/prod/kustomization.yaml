@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: oss-knowledge-backend-prod
+resources:
+- ../../base
+namePrefix: prod-
+
+images:
+- name: oss-knowledge-orchestrator
+  newName: ossknowledgeregistry.azurecr.io/oss-knowledge-orchestrator
+  newTag: latest
+
+labels:
+- includeSelectors: false
+  pairs:
+    environment: prod
+

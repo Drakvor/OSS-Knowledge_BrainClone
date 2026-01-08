@@ -1,0 +1,62 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: oss-knowledge-front-prod
+
+resources:
+- ../../base
+
+patches:
+- target:
+    kind: Deployment
+    name: oss-knowledge-front
+  patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value: oss-knowledge-front-prod
+    - op: replace
+      path: /spec/template/spec/containers/0/image
+      value: oss-knowledge-front:prod
+    - op: replace
+      path: /spec/replicas
+      value: 3
+
+- target:
+    kind: Service
+    name: oss-knowledge-front-service
+  patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value: oss-knowledge-front-prod
+
+- target:
+    kind: Ingress
+    name: oss-knowledge-front-ingress
+  patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value: oss-knowledge-front-prod
+    - op: replace
+      path: /spec/rules/0/host
+      value: oss-knowledge-front.4.230.158.187.nip.io
+
+- target:
+    kind: ConfigMap
+    name: oss-knowledge-front-config
+  patch: |-
+    - op: replace
+      path: /metadata/namespace
+      value: oss-knowledge-front-prod
+    - op: replace
+      path: /data/VITE_API_BASE_URL
+      value: "http://oss-knowledge-meta-api.4.230.158.187.nip.io"
+    - op: replace
+      path: /data/VITE_EMBEDDING_API_BASE_URL
+      value: "http://oss-knowledge-embedding.4.230.158.187.nip.io"
+    - op: replace
+      path: /data/VITE_SEARCH_API_BASE_URL
+      value: "http://oss-knowledge-search.4.230.158.187.nip.io"
+
+commonLabels:
+  app: oss-knowledge-front
+  environment: prod

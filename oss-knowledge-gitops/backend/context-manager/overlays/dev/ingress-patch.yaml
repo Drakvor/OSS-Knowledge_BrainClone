@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: context-manager
+spec:
+    rules:
+        - host: oss-knowledge-context-manager-dev.4.230.158.187.nip.io
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: dev-context-manager
+                            port:
+                                number: 8005
+

@@ -1,0 +1,18 @@
+# Intent Classifier Configuration
+
+# Routing flags
+routing:
+  # Enable task planner for COMPLEX intents
+  # Note: Orchestrator will decide based on its own config whether to use planner or go straight to RAG
+  complex_use_planner: true
+  
+  # Enable context manager for CONTEXT intents
+  context_use_manager: true
+
+# Azure OpenAI Configuration (same as other services)
+azure_openai:
+  endpoint: ""  # Set via environment variable AZURE_OPENAI_ENDPOINT
+  api_key: ""  # Set via environment variable OPENAI_API_KEY
+  deployment: "gpt-4.1-mini"  # Set via environment variable AZURE_OPENAI_DEPLOYMENT
+  api_version: "2024-12-01-preview"  # Set via environment variable AZURE_OPENAI_API_VERSION
+

@@ -1,0 +1,19 @@
+{
+  "filename": "test_interactive.md",
+  "container": "test",
+  "embedding_model": "text-embedding-3-large",
+  "chunks": [
+    {
+      "chunk_id": "test_chunk_1",
+      "content": "# Interactive Markdown Test\n\nThis is a test document for the new interactive chunking feature.",
+      "chunk_type": "header_section",
+      "metadata": {"section": "title"}
+    },
+    {
+      "chunk_id": "test_chunk_2",
+      "content": "## Section 1: Introduction\n\nThis section introduces the concept of interactive chunking for markdown documents.\n\nInteractive chunking allows users to:\n- Preview how their document will be split into chunks\n- Manually edit chunk boundaries and content\n- Review and approve final chunking before storage",
+      "chunk_type": "content_section",
+      "metadata": {"section": "introduction"}
+    }
+  ]
+}

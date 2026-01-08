@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: intent-classifier
+    labels:
+        app: intent-classifier
+spec:
+    type: ClusterIP
+    ports:
+        - port: 8001
+          targetPort: 8001
+          protocol: TCP
+          name: http
+    selector:
+        app: intent-classifier

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oss-knowledge-meta-api-config
+  labels:
+    app: oss-knowledge-meta-api
+data:
+  INTENT_CLASSIFIER_URL: "http://oss-knowledge-intent-classifier-dev.4.230.158.187.nip.io"
+  SEARCH_SERVER_URL: "http://oss-knowledge-search-dev.4.230.158.187.nip.io"
+  EMBEDDING_BACKEND_URL: "http://oss-knowledge-embedding-server-dev.4.230.158.187.nip.io"
