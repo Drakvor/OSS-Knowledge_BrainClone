@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     # Graph Database (Neo4j) Configuration
     NEO4J_URI: str = Field(default="neo4j://localhost:7687", env="NEO4J_URI")
     NEO4J_USERNAME: str = Field(default="neo4j", env="NEO4J_USERNAME")
-    NEO4J_PASSWORD: str = Field(default="password", env="NEO4J_PASSWORD")
+    NEO4J_PASSWORD: str = Field(default="", env="NEO4J_PASSWORD")
     NEO4J_DATABASE: str = Field(default="neo4j", env="NEO4J_DATABASE")
     NEO4J_TIMEOUT: int = Field(default=30, env="NEO4J_TIMEOUT")
 
@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = Field(default=5432, env="POSTGRES_PORT")
     POSTGRES_DATABASE: str = Field(default="oss_knowledge", env="POSTGRES_DATABASE")
     POSTGRES_USER: str = Field(default="oss", env="POSTGRES_USER")
-    POSTGRES_PASSWORD: str = Field(default="changeme", env="POSTGRES_PASSWORD")
+    POSTGRES_PASSWORD: str = Field(default="", env="POSTGRES_PASSWORD")
     
     # Azure OpenAI Configuration
     OPENAI_API_KEY: str = Field(default="", env="OPENAI_API_KEY")
