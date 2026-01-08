@@ -1,1 +1,72 @@
-fatal: path 'oss-knowledge-backend/src/main/resources/application.yaml' exists on disk, but not in 'backup-before-history-rewrite'
+spring:
+    application:
+        name: ossrag-meta-api
+    datasource:
+        url: ${DB_URL:jdbc:postgresql://localhost:5432/oss_knowledge}
+        username: ${DB_USERNAME:oss}
+        password: ${DB_PASSWORD:changeme}
+        driver-class-name: org.postgresql.Driver
+        hikari:
+            maximum-pool-size: 10
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        show-sql: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                format_sql: true
+                jdbc:
+                    time_zone: UTC
+    jackson:
+        date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+        time-zone: UTC
+    main:
+        allow-bean-definition-overriding: true
+    servlet:
+        multipart:
+            enabled: true
+            max-file-size: 10MB
+            max-request-size: 10MB
+springdoc:
+    api-docs:
+        path: /api-docs
+    swagger-ui:
+        path: /swagger-ui.html
+    packages-to-scan: org.ossrag.meta
+logging:
+    level:
+        root: INFO
+        org.ossrag.meta: DEBUG
+        org.springframework.web: DEBUG
+    pattern:
+        console: '{"timestamp":"%d{yyyy-MM-ddTHH:mm:ss.SSSX}","level":"%p","logger":"%c{1}","message":"%m","context":{"requestId":"%X{requestId}","sessionId":"%X{sessionId}"}}%n'
+security:
+    jwt:
+        secret: ${JWT_SECRET:changeme-dev-jwt-secret-key}
+        access-exp-min: 480
+        refresh-exp-days: 7
+
+# Embedding Backend Configuration
+embedding:
+    backend:
+        url: ${EMBEDDING_BACKEND_URL:http://localhost:8000}
+
+# Search Server Configuration
+search:
+    server:
+        url: ${SEARCH_SERVER_URL:http://localhost:8002}
+
+# Intent Classifier Configuration
+intent:
+    classifier:
+        url: ${INTENT_CLASSIFIER_URL:http://localhost:8001}
+
+# Orchestrator Configuration
+orchestrator:
+    url: ${ORCHESTRATOR_URL:http://localhost:8000}
+management:
+    endpoints:
+        web:
+            exposure:
+                include: prometheus
