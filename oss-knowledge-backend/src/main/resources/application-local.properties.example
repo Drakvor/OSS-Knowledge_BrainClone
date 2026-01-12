@@ -1,0 +1,15 @@
+# Spring Boot Local Profile Configuration
+# Copy this file to application-local.properties and fill in your actual values
+# This file is gitignored - it contains sensitive local development values
+# 
+# To use this file, set the active profile:
+#   export SPRING_PROFILES_ACTIVE=local
+#   or
+#   java -jar app.jar --spring.profiles.active=local
+
+# Database Configuration
+spring.datasource.password=${DB_PASSWORD:your-postgres-password-here}
+
+# JWT Secret
+security.jwt.secret=${JWT_SECRET:your-jwt-secret-key-here}
+

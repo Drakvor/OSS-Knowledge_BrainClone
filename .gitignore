@@ -26,9 +26,16 @@ archives/
 # Environment and secrets
 .env
 .env.local
+# Ignore .env.* but allow .env.example (template files)
+.env.*
+!.env.example
 *.key
 *.pem
 secrets/
+# Spring Boot local profile (contains sensitive values)
+**/application-local.properties
+# GitOps (contains Kubernetes secrets with sensitive data)
+oss-knowledge-gitops/
 
 # Python
 __pycache__/
